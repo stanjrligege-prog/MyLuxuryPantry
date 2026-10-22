@@ -14,6 +14,16 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientHolder> {
 
     private List<Ingredient> ingredients = new ArrayList<>();
+
+    private OnItemLongClickListener longClickListener;
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(Ingredient ingredient);
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
+    }
     private OnItemClickListener listener;
 
     // Interface so the Activity can handle clicks (for editing/deleting later)
@@ -68,6 +78,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                 if (listener != null && position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(ingredients.get(position));
                 }
+            });
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if (longClickListener != null && position != RecyclerView.NO_POSITION) {
+                    longClickListener.onItemLongClick(ingredients.get(position));
+                    return true;
+                }
+                return false;
             });
         }
     }

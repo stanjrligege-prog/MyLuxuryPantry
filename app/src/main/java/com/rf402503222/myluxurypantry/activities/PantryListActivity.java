@@ -20,7 +20,6 @@ public class PantryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry_list);
 
-        // 1. Setup RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -28,17 +27,38 @@ public class PantryListActivity extends AppCompatActivity {
         adapter = new IngredientAdapter();
         recyclerView.setAdapter(adapter);
 
-        // 2. Setup Database (THIS IS WHAT CRASHED - ensure it's here)
+        adapter.setOnItemClickListener(ingredient -> {
+            Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
+
+            intent.putExtra(AddEditIngredientActivity.EXTRA_ID, ingredient.getId());
+            intent.putExtra(AddEditIngredientActivity.EXTRA_NAME, ingredient.getName());
+            intent.putExtra(AddEditIngredientActivity.EXTRA_QUANTITY, ingredient.getQuantity());
+            intent.putExtra(AddEditIngredientActivity.EXTRA_UNIT, ingredient.getUnit());
+
+            startActivity(intent);
+        });
+
+        adapter.setOnItemLongClickListener(ingredient -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Delete Ingredient")
+                    .setMessage("Are you sure you want to delete " + ingredient.getName() + "?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        new Thread(() -> {
+                            database.ingredientDao().delete(ingredient);
+                        }).start();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
         database = AppDatabase.getInstance(this);
 
-        // 3. Setup FAB (Floating Action Button)
         FloatingActionButton fab = findViewById(R.id.fabAdd);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
 
-        // 4. Observe LiveData from Database
         database.ingredientDao().getAllIngredients().observe(this, ingredients -> {
             adapter.setIngredients(ingredients);
         });
