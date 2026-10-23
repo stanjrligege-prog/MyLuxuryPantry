@@ -1,13 +1,8 @@
 package com.rf402503222.myluxurypantry.activities;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.rf402503222.myluxurypantry.R;
 
 public class RecipeDetailActivity extends AppCompatActivity {
@@ -15,12 +10,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_recipe_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        TextView tvName = findViewById(R.id.tvDetailName);
+        TextView tvIngredients = findViewById(R.id.tvDetailIngredients);
+        TextView tvInstructions = findViewById(R.id.tvDetailInstructions);
+
+        String name = getIntent().getStringExtra("RECIPE_NAME");
+        String ingredients = getIntent().getStringExtra("RECIPE_INGREDIENTS");
+        String instructions = getIntent().getStringExtra("RECIPE_INSTRUCTIONS");
+
+        if (name != null) {
+            tvName.setText(name);
+            tvIngredients.setText(ingredients);
+            tvInstructions.setText(instructions);
+            setTitle(name);
+        }
     }
 }
