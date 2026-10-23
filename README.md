@@ -11,7 +11,7 @@ Strict-Matching Algorithm: Only suggests recipes if the user has every single on
 Settings: Acts as a toggle for alerts which send expiring-soon messages using SharedPreferences.
 
 Steps for the setup and running of the app:
-1. Clone this repository: `git clone https://github.com/stanjrligege-prog/MyLuxuryPantry.git`
+1. Extract the files from the submitted zip.
 2. Open the project in Android Studio.
 3. Allow Gradle to sync.
 4. Run the app on an emulator or physical Android device (Minimum SDK: API 24).
