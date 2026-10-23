@@ -18,10 +18,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+
+        bottomNav.setSelectedItemId(R.id.nav_pantry);
 
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();

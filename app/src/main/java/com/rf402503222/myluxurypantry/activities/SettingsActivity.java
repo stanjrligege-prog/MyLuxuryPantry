@@ -18,12 +18,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         SwitchMaterial switchExpiring = findViewById(R.id.switchExpiring);
 
-        // Load saved preference
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isAlertsEnabled = prefs.getBoolean(KEY_EXPIRING_ALERTS, true); // Default to true
         switchExpiring.setChecked(isAlertsEnabled);
 
-        // Save preference when toggled
         switchExpiring.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(KEY_EXPIRING_ALERTS, isChecked);
