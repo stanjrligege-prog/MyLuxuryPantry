@@ -1,26 +1,33 @@
 package com.rf402503222.myluxurypantry.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.rf402503222.myluxurypantry.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String PREFS_NAME = "SettingsPrefs";
+    private static final String KEY_EXPIRING_ALERTS = "expiring_alerts";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        SwitchMaterial switchExpiring = findViewById(R.id.switchExpiring);
+
+        // Load saved preference
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isAlertsEnabled = prefs.getBoolean(KEY_EXPIRING_ALERTS, true); // Default to true
+        switchExpiring.setChecked(isAlertsEnabled);
+
+        // Save preference when toggled
+        switchExpiring.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(KEY_EXPIRING_ALERTS, isChecked);
+            editor.apply();
         });
     }
 }
